@@ -13,7 +13,7 @@
 import requests
 import os
 from sentence_transformers import SentenceTransformer
-from Fronted.Services.vector_store import load_data, create_faiss_index, search_similar_chunks
+from Frontend.Services.vector_store import load_data, create_faiss_index, search_similar_chunks
 import google.generativeai as genai
 
 # =========== Base function: send prompt to Ollama ============ #

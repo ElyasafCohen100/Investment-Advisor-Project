@@ -18,7 +18,7 @@ from PySide6.QtCore import Qt, QDate
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
-from Fronted.Services.api_service import APIService
+from Frontend.Services.api_service import APIService
 
 
 # ======================================== ORDER HISTORY WINDOW ======================================== #

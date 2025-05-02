@@ -14,7 +14,6 @@ class APIService:
             })
             response.raise_for_status()
 
-
             # נניח שהשרת מחזיר גם userId
             if response.status_code == 200:
                 data = response.json()
@@ -46,8 +45,6 @@ class APIService:
             stock_data = stock_response["data"]
             stock_id = stock_data["id"]
             price = stock_data.get("currentPrice", 100)  # מחיר מדומה אם אין
-
-
 
             payload = {
                 "userId": APIService.current_user_id,
@@ -134,4 +131,3 @@ class APIService:
             return response.json()  # ← מחזיר את מה שהשרת החזיר בפועל, כולל userId
         except Exception as e:
             return {"success": False, "message": str(e)}
-

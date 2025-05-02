@@ -6,11 +6,10 @@
 # ║  🧑‍💻 Elyasaf Cohen 311557227 🧑‍💻
 # ║  🧑‍💻 Eldad Cohen   207920711 🧑‍💻
 # ║  🧑‍💻 Israel Shlomo 315130344 🧑‍💻
-# ║
-# ╚══════════════════════════════════╝
+# ╚═════════════════════════════════╝
 
 import sys
-
+import os
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QCursor, QPalette, QPixmap
 from PySide6.QtWidgets import (
@@ -24,9 +23,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from Fronted.Services.api_service import APIService
-from Fronted.Windows.MainWindow import MainWindow
-
+from Frontend.Services.api_service import APIService
+from Frontend.Windows.MainWindow import MainWindow
 
 # ======================================== LOGIN WINDOW ======================================== #
 class LoginWindow(QWidget):
@@ -35,15 +33,15 @@ class LoginWindow(QWidget):
         self.setWindowTitle("Login – Secure Access 🔐")
         self.resize(800, 500)
 
-        # ===== Set Background Image ===== #
+        # ===== Set Background Image Dynamically ===== #
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        image_path = os.path.join(base_dir, "..", "Pictures", "background_pic.jpeg")
         palette = QPalette()
-        background = QPixmap(
-            "C:\\Users\\Israel\\PycharmProjects\\InvestmentAdvisor\\Pictures\\background_pic.jpeg"
-        )  # ✅ make sure this exists
+        background = QPixmap(image_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
-        # ====== Style ====== #
+        # ====== Style Sheet ====== #
         self.setStyleSheet(
             """
             QWidget {
@@ -113,7 +111,7 @@ class LoginWindow(QWidget):
         self.login_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.login_button.clicked.connect(self.handle_login)
 
-        # ====== signup button ====== #
+        # ====== SIGNUP BUTTON ====== #
         self.signup_button = QPushButton("📝 Sign Up")
         self.signup_button.setFixedWidth(180)
         self.signup_button.setCursor(QCursor(Qt.PointingHandCursor))
@@ -132,16 +130,13 @@ class LoginWindow(QWidget):
 
         self.setLayout(layout)
 
-    # ====== Logic for login success ====== #
+    # ====== Login Logic ====== #
     def handle_login(self):
         username = self.username_input.text().strip()
         password = self.password_input.text().strip()
-        # remember = self.remember_me_checkbox.isChecked()
 
         if not username or not password:
-            QMessageBox.warning(
-                self, " Missing Info❗", "Please enter both username and password."
-            )
+            QMessageBox.warning(self, " Missing Info❗", "Please enter both username and password.")
             return
 
         response = APIService.login(username, password)
@@ -162,11 +157,10 @@ class LoginWindow(QWidget):
         self.close()
 
     def handle_signup(self):
-        from Fronted.Windows.SignUpWindow import SignUpWindow
+        from Frontend.Windows.SignUpWindow import SignUpWindow
         self.signup_window = SignUpWindow(login_window=self)
         self.signup_window.show()
         self.hide()
-
 
 # ======================================== MAIN EXECUTION ======================================== #
 if __name__ == "__main__":

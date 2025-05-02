@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPixmap, QPalette, QBrush, QCursor
 from PySide6.QtCore import Qt
-from Fronted.Services.api_service import APIService
+from Frontend.Services.api_service import APIService
 
 
 # ======================================== PORTFOLIO WINDOW ======================================== #

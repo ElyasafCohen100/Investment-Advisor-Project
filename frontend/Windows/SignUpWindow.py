@@ -10,14 +10,14 @@
 # ╚══════════════════════════════════╝
 
 
-from Fronted.Windows.MainWindow import MainWindow
+from Frontend.Windows.MainWindow import MainWindow
 
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout
 )
 from PySide6.QtGui import QPalette, QBrush, QPixmap, QCursor
 from PySide6.QtCore import Qt
-from Fronted.Services.api_service import APIService
+from Frontend.Services.api_service import APIService
 import os
 
 

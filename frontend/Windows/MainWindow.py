@@ -22,17 +22,15 @@ import matplotlib.dates as mdates
 from urllib.request import urlopen
 
 # ============= Import custom project files ============= #
-from Fronted.Constants.stock_logos import stock_logos
-from Fronted.Services.polygon_service import PolygonService
-from Fronted.Services.Ollama_api import ask_ollama
-from Fronted.Windows.BuyStocksWindow import BuyStocksWindow
-from Fronted.Windows.SellStocksWindow import SellStocksWindow
-from Fronted.Windows.OrderHistoryWindow import OrderHistoryWindow
-from Fronted.Windows.PortfolioWindow import PortfolioWindow
-from Fronted.Windows.AIChatBotWindow import AIChatBotWindow
-from Fronted.Services.Ollama_api import ask_google_gemini
-
-
+from Frontend.Constants.stock_logos import stock_logos
+from Frontend.Services.polygon_service import PolygonService
+from Frontend.Services.Ollama_api import ask_ollama
+from Frontend.Windows.BuyStocksWindow import BuyStocksWindow
+from Frontend.Windows.SellStocksWindow import SellStocksWindow
+from Frontend.Windows.OrderHistoryWindow import OrderHistoryWindow
+from Frontend.Windows.PortfolioWindow import PortfolioWindow
+from Frontend.Windows.AIChatBotWindow import AIChatBotWindow
+from Frontend.Services.Ollama_api import ask_google_gemini
 
 
 # ╔════════════════════════════════════════════════════════════════╗

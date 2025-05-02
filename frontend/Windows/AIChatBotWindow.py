@@ -15,7 +15,7 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QPalette, QBrush, QPixmap
 from PySide6.QtCore import Qt, QTimer
-from Fronted.Services.Ollama_api import ask_ollama_contextual
+from Frontend.Services.Ollama_api import ask_ollama_contextual
 
 # ======================================== AI CHATBOT WINDOW ======================================== #
 class AIChatBotWindow(QWidget):
