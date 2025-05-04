@@ -1,53 +1,64 @@
-﻿using StockAdvisorBackend.Models;
-using StockAdvisorBackend.Repositories.Interfaces;
+﻿// ╔════════════════════════════════════════════════════════════════════════════╗
+// ║                      💸 TransactionService.cs                              
+// ║                                                                           
+// ║ 💡 Purpose:                                                                
+// ║   - Handles business logic for transactions (buy/sell stocks).            
+// ║   - Delegates DB operations to ITransactionRepository.                    
+// ║                                                                           
+// ║ 🧰 Used by: TransactionController                                           
+// ╚════════════════════════════════════════════════════════════════════════════╝
+
+using StockAdvisorBackend.Models;
 using StockAdvisorBackend.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+using StockAdvisorBackend.Repositories.Interfaces;
 
 namespace StockAdvisorBackend.Services.Implementations
 {
     public class TransactionService : ITransactionService
     {
+        // ======= Injected repository ======= //
         private readonly ITransactionRepository _transactionRepository;
 
+        // ======= Constructor ======= //
         public TransactionService(ITransactionRepository transactionRepository)
         {
             _transactionRepository = transactionRepository;
         }
 
-        // קבלת כל העסקאות של המשתמש לפי userId
+        // ======= Get all transactions by user ID ======= //
         public async Task<List<TransactionModel>> GetTransactionsByUserIdAsync(int userId)
         {
             return await _transactionRepository.GetTransactionsByUserIdAsync(userId);
         }
 
-        // הוספת עסקה חדשה
+        // ======= Add a new transaction ======= //
         public async Task AddTransactionAsync(TransactionModel transaction)
         {
             await _transactionRepository.AddTransactionAsync(transaction);
         }
 
-        // קבלת עסקה לפי ID
+        // ======= Get transaction by ID ======= //
         public async Task<TransactionModel> GetTransactionByIdAsync(int id)
         {
             return await _transactionRepository.GetTransactionByIdAsync(id);
         }
 
-        // עדכון עסקה קיימת
+        // ======= Update an existing transaction ======= //
         public async Task UpdateTransactionAsync(TransactionModel transaction)
         {
             await _transactionRepository.UpdateTransactionAsync(transaction);
         }
 
-        // מחיקת עסקה
+        // ======= Delete transaction by ID ======= //
         public async Task DeleteTransactionAsync(int id)
         {
             await _transactionRepository.DeleteTransactionAsync(id);
         }
 
-        public async Task<List<TransactionModel>> GetAllTransactionsAsync()  // הוספנו את הפונקציה הזאת
+        // ======= Get all transactions ======= //
+        public async Task<List<TransactionModel>> GetAllTransactionsAsync()
         {
-            return await _transactionRepository.GetAllTransactionsAsync();  // הנחתי שאתה מקבל את כל העיסקאות מ-Repository
+            return await _transactionRepository.GetAllTransactionsAsync();
         }
     }
 }

@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// ╔═════════════════════════════════════╗
+// ║           📦 Stock DTO    
+// ║  Contains stock symbol and price  
+// ╚═════════════════════════════════════╝
+
+using System.ComponentModel.DataAnnotations;
 
 namespace StockAdvisorBackend.DTOs
 {
@@ -7,7 +12,6 @@ namespace StockAdvisorBackend.DTOs
         [Required(ErrorMessage = "Symbol is required")]
         [StringLength(10, ErrorMessage = "Symbol must be up to 10 characters")]
         public string Symbol { get; set; }
-
 
         [Range(0.01, double.MaxValue, ErrorMessage = "Current price must be positive")]
         public decimal CurrentPrice { get; set; }

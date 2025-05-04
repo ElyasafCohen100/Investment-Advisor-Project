@@ -8,8 +8,8 @@
 # ║  🧑‍💻 Israel Shlomo 315130344 🧑‍💻
 # ╚═════════════════════════════════╝
 
-import sys
 import os
+import sys
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QBrush, QCursor, QPalette, QPixmap
 from PySide6.QtWidgets import (
@@ -23,8 +23,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from Frontend.Services.api_service import APIService
 from Frontend.Windows.MainWindow import MainWindow
+from Frontend.Services.api_service import APIService
+
 
 # ======================================== LOGIN WINDOW ======================================== #
 class LoginWindow(QWidget):
@@ -132,6 +133,7 @@ class LoginWindow(QWidget):
 
     # ====== Login Logic ====== #
     def handle_login(self):
+
         username = self.username_input.text().strip()
         password = self.password_input.text().strip()
 
@@ -149,7 +151,7 @@ class LoginWindow(QWidget):
             self.open_main_window()
         else:
             error_message = response.get("message", "Login failed ❌")
-            QMessageBox.critical(self, "Login Failed ❌", error_message)
+            QMessageBox.critical(self, "Login Failed ❌",     error_message)
 
     def open_main_window(self):
         self.main_window = MainWindow()
@@ -161,6 +163,7 @@ class LoginWindow(QWidget):
         self.signup_window = SignUpWindow(login_window=self)
         self.signup_window.show()
         self.hide()
+
 
 # ======================================== MAIN EXECUTION ======================================== #
 if __name__ == "__main__":

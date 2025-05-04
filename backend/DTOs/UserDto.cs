@@ -1,4 +1,9 @@
-﻿namespace StockAdvisorBackend.DTOs
+﻿// ╔════════════════════════════════════════════════╗
+// ║                 📦 User DTO   
+// ║  Basic user data for registration or update  
+// ╚════════════════════════════════════════════════╝
+
+namespace StockAdvisorBackend.DTOs
 {
     public class UserDto
     {

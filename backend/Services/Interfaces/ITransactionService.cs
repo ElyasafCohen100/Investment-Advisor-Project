@@ -1,18 +1,26 @@
-﻿using StockAdvisorBackend.Models;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿// ╔═════════════════════════════════════════════════════════════════════════════════╗
+// ║                    💸 ITransactionService.cs                                    
+// ║                                                                                 
+// ║ 💡 Purpose:                                                                      
+// ║   - Interface defining services for managing stock transactions.                
+// ║   - Supports operations like create, fetch, update, and delete transactions.    
+// ║   - Also fetches transactions by user ID and returns all transactions.          
+// ║                                                                                 
+// ║ 📦 Implemented by: TransactionService                                            
+// ╚═════════════════════════════════════════════════════════════════════════════════╝
+
+using StockAdvisorBackend.Models;
+
 
 namespace StockAdvisorBackend.Services.Interfaces
 {
     public interface ITransactionService
     {
-        Task<List<TransactionModel>> GetTransactionsByUserIdAsync(int userId);
-            
+        Task DeleteTransactionAsync(int id);
         Task AddTransactionAsync(TransactionModel transaction);
         Task<TransactionModel> GetTransactionByIdAsync(int id);
         Task UpdateTransactionAsync(TransactionModel transaction);
-        Task DeleteTransactionAsync(int id);
-
         Task<List<TransactionModel>> GetAllTransactionsAsync();
+        Task<List<TransactionModel>> GetTransactionsByUserIdAsync(int userId);
     }
 }

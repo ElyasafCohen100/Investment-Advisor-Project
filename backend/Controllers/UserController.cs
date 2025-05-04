@@ -1,25 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// ╔═════════════════════════════════════════════════════════════════════╗
+// ║                      👤 UserController.cs                             
+// ║                                                                           
+// ║  💡 Purpose:                                                             
+// ║     Manages user actions:                                                
+// ║     - Register new users                                                 
+// ║     - Login with simple credentials                                      
+// ║     - Get user info (all or by ID)                                       
+// ║     - Update or delete user account                                      
+// ║                                                                           
+// ║  🧰 Note:                                                                
+// ║     Passwords are stored in plain text here (for demo only!).            
+// ║     In production, use hashing & encryption!                             
+// ╚═════════════════════════════════════════════════════════════════════╝
+
+using Microsoft.AspNetCore.Mvc;
 using StockAdvisorBackend.DTOs;
 using StockAdvisorBackend.Models;
-using Microsoft.AspNetCore.Identity.Data;
 using StockAdvisorBackend.Services.Interfaces;
 using LoginRequest = StockAdvisorBackend.DTOs.LoginRequest;
 using AdviceRequsetDto = StockAdvisorBackend.DTOs.AdviceRequsetDto;
 
-
 namespace StockAdvisorBackend.Controllers
 {
+    // ======= Route: api/User ======= //
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
+        // ======= Injected user service ======= //
         private readonly IUserService _userService;
 
-        public UserController(IUserService userService) //Dependency Injection
+        // ======= Constructor ======= //
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
 
+        // ======= POST: Register a new user ======= //
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] AdviceRequsetDto request)
         {
@@ -29,7 +46,7 @@ namespace StockAdvisorBackend.Controllers
             var user = new UserModel
             {
                 Username = request.Username,
-                PasswordHash = request.Password // בשלב הזה אין הצפנה אמיתית (רק הדגמה פשוטה)
+                PasswordHash = request.Password // 🔓 Plain text! Hash it in real apps!
             };
 
             await _userService.AddUserAsync(user);
@@ -38,17 +55,19 @@ namespace StockAdvisorBackend.Controllers
             {
                 success = true,
                 message = "User registered successfully!",
-                userId = user.Id  // ודא ש־Id קיים ונוצר ב־AddUserAsync
+                userId = user.Id
             });
         }
 
+        // ======= GET: Get all users ======= //
         [HttpGet]
-        public async Task<IActionResult> GetAllUsers() // Get all users
+        public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userService.GetAllUsersAsync();
             return Ok(users);
         }
 
+        // ======= POST: User login ======= //
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
@@ -60,20 +79,15 @@ namespace StockAdvisorBackend.Controllers
             if (user == null || user.PasswordHash != request.Password)
                 return Unauthorized("Invalid username or password.");
 
-            //return Ok(new // Return a token or user info
-            //{
-            //    userId = user.Id,
-            //    message = $"Welcome back, {user.Username}!"
-            //});
-
             return Ok(new
             {
-                id = user.Id,                      // ✅ זו השורה שחשובה!
+                userId = user.Id,
                 username = user.Username,
                 message = "Login successful!"
             });
         }
 
+        // ======= GET: Get user by ID ======= //
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
         {
@@ -85,6 +99,7 @@ namespace StockAdvisorBackend.Controllers
             return Ok(user);
         }
 
+        // ======= PUT: Update user details ======= //
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserDto request)
         {
@@ -93,18 +108,19 @@ namespace StockAdvisorBackend.Controllers
                 return NotFound("User not found.");
 
             user.Username = request.Username;
-            user.PasswordHash = request.Password; // תלוי אם יש הצפנה בעתיד
-                                                  // תוסיף פה עוד שדות אם תרצה בעתיד (אימייל, טלפון וכו')
+            user.PasswordHash = request.Password;
 
             await _userService.UpdateUserAsync(user);
 
             return Ok("User updated successfully!");
         }
 
+        // ======= DELETE: Delete user by ID ======= //
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(int id)
         {
             var user = await _userService.GetUserByIdAsync(id);
+
             if (user == null)
                 return NotFound("User not found.");
 

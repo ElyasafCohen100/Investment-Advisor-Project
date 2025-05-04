@@ -1,4 +1,7 @@
-﻿using System.Transactions;
+﻿// ╔═════════════════════════════════════════════════════╗
+// ║                👤 User Model                    
+// ║  Represents the user entity in the system database  
+// ╚═════════════════════════════════════════════════════╝
 
 namespace StockAdvisorBackend.Models
 {
@@ -6,10 +9,7 @@ namespace StockAdvisorBackend.Models
     {
         public int Id { get; set; }
         public string Username { get; set; }
-
-
         public string PasswordHash { get; set; }
-
         public List<PortfolioModel> Portfolio { get; set; }
         public List<TransactionModel> Transactions { get; set; }
     }

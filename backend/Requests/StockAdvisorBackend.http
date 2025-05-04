@@ -1,0 +1,18 @@
+﻿###
+// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                        🌐 API Test File                             
+// ║   💡 Purpose:                                                        
+// ║     Sends a GET request to the /weatherforecast endpoint             
+// ║     on the StockAdvisor backend running locally.                   
+// ║                                                                      
+// ║   📌 Notes:                                                          
+// ║     - Change the host/port if backend is running on a different URL 
+// ║     - You can test more endpoints by duplicating and editing blocks 
+// ╚══════════════════════════════════════════════════════════════════════╝
+
+@StockAdvisorBackend_HostAddress = http://localhost:5025
+
+GET {{StockAdvisorBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

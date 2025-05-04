@@ -21,9 +21,9 @@
 # Step 4: (Later) Create embeddings for each chunk #
 # ------------------------------------------------ #
 
-from PyPDF2 import PdfReader
 import re
 import os
+from PyPDF2 import PdfReader
 
 
 # ==== Loads a PDF file and extracts all its text content ==== #

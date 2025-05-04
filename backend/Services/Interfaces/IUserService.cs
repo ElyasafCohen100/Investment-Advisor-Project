@@ -1,4 +1,13 @@
-﻿using System.Threading.Tasks;
+﻿// ╔═══════════════════════════════════════════════════════════════════════════╗
+// ║                         👤 IUserService.cs                                          
+// ║                                                                                    
+// ║ 💡 Purpose:                                                                         
+// ║   - Interface defining the user-related business logic layer.                      
+// ║   - Includes methods for user creation, update, deletion, and lookup.              
+// ║                                                                                    
+// ║ 📦 Implemented by: UserService                                                      
+// ╚═══════════════════════════════════════════════════════════════════════════╝
+
 using StockAdvisorBackend.Models;
 
 namespace StockAdvisorBackend.Services.Interfaces

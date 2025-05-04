@@ -9,13 +9,15 @@
 # ║
 # ╚══════════════════════════════════╝
 
+import os
+
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QHBoxLayout, QListWidget, QListWidgetItem,
     QPushButton, QTableWidget, QTableWidgetItem, QMessageBox
 )
-from PySide6.QtGui import QPixmap, QPalette, QBrush, QCursor
 from PySide6.QtCore import Qt
 from Frontend.Services.api_service import APIService
+from PySide6.QtGui import QPixmap, QPalette, QBrush, QCursor
 
 
 # ======================================== PORTFOLIO WINDOW ======================================== #
@@ -25,10 +27,12 @@ class PortfolioWindow(QWidget):
         self.setWindowTitle("🌐 Portfolio – Investment Overview 🌐")
         self.resize(950, 650)
 
-        # ===== Set Background Image ===== #
+        # ===== Set Background Image from Relative Path ===== #
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
+
         palette = QPalette()
-        background = QPixmap(
-            "C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg")  # ✅ make sure this exists
+        background = QPixmap(bg_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 

@@ -1,13 +1,24 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// ╔═════════════════════════════════════════════════════════════════════════════╗
+// ║                     💸 TransactionController.cs
+// ║
+// ║  💡 Purpose:                                                                  
+// ║     Handles CRUD operations for user stock transactions.                     
+// ║     Automatically updates the portfolio when a user buys or sells a stock.  
+// ║                                                                              
+// ║  🧰 Tech:                                                                     
+// ║     - ASP.NET Core Web API                                                   
+// ║     - ITransactionService & IPortfolioService                               
+// ║     - Business logic to manage investments                                   
+// ╚════════════════════════════════════════════════════════════════════════════╝
+
+using Microsoft.AspNetCore.Mvc;
 using StockAdvisorBackend.DTOs;
 using StockAdvisorBackend.Models;
-using StockAdvisorBackend.Services.Implementations;
 using StockAdvisorBackend.Services.Interfaces;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace StockAdvisorBackend.Controllers
 {
+    // ======= Route: api/Transaction ======= //
     [Route("api/[controller]")]
     [ApiController]
     public class TransactionController : ControllerBase
@@ -15,14 +26,13 @@ namespace StockAdvisorBackend.Controllers
         private readonly ITransactionService _transactionService;
         private readonly IPortfolioService _portfolioService;
 
-
         public TransactionController(ITransactionService transactionService, IPortfolioService portfolioService)
         {
             _transactionService = transactionService;
             _portfolioService = portfolioService;
         }
 
-        // קבלת כל העסקאות
+        // ======= GET: All transactions ======= //
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TransactionModel>>> GetAllTransactions()
         {
@@ -30,7 +40,7 @@ namespace StockAdvisorBackend.Controllers
             return Ok(transactions);
         }
 
-        // קבלת עסקה לפי ID
+        // ======= GET: Transaction by ID ======= //
         [HttpGet("{id}")]
         public async Task<ActionResult<TransactionModel>> GetTransactionById(int id)
         {
@@ -40,6 +50,7 @@ namespace StockAdvisorBackend.Controllers
             return Ok(transaction);
         }
 
+        // ======= GET: Transactions by user ID ======= //
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetTransactionsByUserId(int userId)
         {
@@ -51,8 +62,7 @@ namespace StockAdvisorBackend.Controllers
             return Ok(transactions);
         }
 
-
-        // הוספת עסקה חדשה
+        // ======= POST: Create a new transaction ======= //
         [HttpPost]
         public async Task<IActionResult> AddTransaction([FromBody] TransactionDto request)
         {
@@ -68,16 +78,13 @@ namespace StockAdvisorBackend.Controllers
 
             await _transactionService.AddTransactionAsync(transaction);
 
-
-
-            // ⬇️ עדכון תיק השקעות רק בעסקת קנייה
+            // ===== BUY: Add or update portfolio ===== //
             if (request.TransactionType.ToLower() == "buy")
             {
                 var existingItem = await _portfolioService.GetPortfolioItemAsync(request.UserId, request.StockId);
 
                 if (existingItem != null)
                 {
-                    // חישוב כמות ומחיר ממוצע חדש
                     int newAmount = existingItem.PortfolioQuantity + request.TransactionAmount;
                     decimal newAvgPrice = (
                         (existingItem.PortfolioQuantity * existingItem.AveragePurchasePrice) +
@@ -91,7 +98,6 @@ namespace StockAdvisorBackend.Controllers
                 }
                 else
                 {
-                    // אין פריט קיים – יצירה חדשה
                     var newItem = new PortfolioModel
                     {
                         UserId = request.UserId,
@@ -103,37 +109,29 @@ namespace StockAdvisorBackend.Controllers
                     await _portfolioService.AddPortfolioItemAsync(newItem);
                 }
             }
+            // ===== SELL: Update or remove from portfolio ===== //
             else if (request.TransactionType.ToLower() == "sell")
             {
                 var existingItem = await _portfolioService.GetPortfolioItemAsync(request.UserId, request.StockId);
 
                 if (existingItem == null)
-                {
                     return BadRequest("Cannot sell a stock you don't own.");
-                }
 
                 if (existingItem.PortfolioQuantity < request.TransactionAmount)
-                {
                     return BadRequest("Not enough shares to sell.");
-                }
 
                 existingItem.PortfolioQuantity -= request.TransactionAmount;
 
                 if (existingItem.PortfolioQuantity == 0)
-                {
                     await _portfolioService.RemovePortfolioItemAsync(request.UserId, request.StockId);
-                }
                 else
-                {
                     await _portfolioService.UpdatePortfolioItemAsync(existingItem);
-
-                }
             }
-
 
             return Ok("Transaction created successfully!");
         }
 
+        // ======= PUT: Update a transaction ======= //
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTransaction(int id, [FromBody] TransactionDto request)
         {
@@ -152,9 +150,8 @@ namespace StockAdvisorBackend.Controllers
 
             return Ok("Transaction updated successfully!");
         }
-    
 
-        // מחיקת עסקה
+        // ======= DELETE: Delete a transaction by ID ======= //
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTransaction(int id)
         {

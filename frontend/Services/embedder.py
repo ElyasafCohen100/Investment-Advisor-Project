@@ -10,8 +10,8 @@
 # ╚══════════════════════════════════╝
 
 # =========== Load libraries ============ #
-from sentence_transformers import SentenceTransformer
 import json
+from sentence_transformers import SentenceTransformer
 
 # =========== Create embeddings for all chunks ============ #
 def create_embeddings(chunks: list[str], model_name: str = 'all-MiniLM-L6-v2') -> list[list[float]]:

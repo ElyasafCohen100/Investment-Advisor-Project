@@ -1,45 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// ╔════════════════════════════════════════════════════════════════════════════════╗
+// ║                     🤖 AdviceRequestController.cs                             
+// ║  💡 Purpose:                                                                  
+// ║     Receives advice questions from users, sends them to Ollama LLM,          
+// ║     stores the AI response in the database, and returns the result.          
+// ║     Supports GET and POST endpoints.                                         
+// ║                                                                              
+// ║  🧰 Tech:                                                                     
+// ║     - ASP.NET Core Web API                                                   
+// ║     - HTTP client for AI request                                            
+// ║     - Dependency Injection (AdviceRequestService)                            
+// ╚════════════════════════════════════════════════════════════════════════════════╝
+
+using Microsoft.AspNetCore.Mvc;
 using StockAdvisorBackend.Models;
 using StockAdvisorBackend.Services.Interfaces;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Json;
 
 namespace StockAdvisorBackend.Controllers
-{ 
-
-
+{
+    // ======== Route: api/AdviceRequest ========= //
     [ApiController]
-    [Route("api/[controller]")] // מסלול ה-API יהיה api/AdviceRequest
+    [Route("api/[controller]")] 
     public class AdviceRequestController : ControllerBase
     {
+        // ======== Injected Service to handle DB logic ========= //
         private readonly IAdviceRequestService _adviceRequestService;
 
-        // קונסטרקטור שמכניס את ה-AdviceRequestService
+        // ======== Constructor for Dependency Injection ========= //
         public AdviceRequestController(IAdviceRequestService adviceRequestService)
         {
             _adviceRequestService = adviceRequestService;
         }
 
-        // --- פונקציה ליצירת שאלה חדשה ---
+        // ======== POST: Create a new advice request ========= //
+        // Receives a user question, sends it to Ollama, stores the answer
         [HttpPost]
         public async Task<IActionResult> CreateAdviceRequest([FromBody] AdviceRequestModel adviceRequest)
         {
-            // שמירת תאריך יצירת הבקשה
             adviceRequest.CreatedAt = DateTime.UtcNow;
 
-            // שליחת השאלה לשרת Ollama וקבלת תשובה
             adviceRequest.Response = await SendQuestionToOllama(adviceRequest.Question);
 
-            // שמירה של השאלה + התשובה במסד הנתונים (Somee)
             await _adviceRequestService.AddAdviceRequestAsync(adviceRequest);
 
-            // החזרת תגובה חיובית ל-Frontend
             return Ok(new { message = "Advice request created and answered successfully." });
         }
 
-        // --- פונקציה לקבל את כל השאלות של יוזר מסויים לפי ה-UserId ---
+        // ======== GET: Get all advice requests for a specific user ========= //
         [HttpGet("{userId}")]
         public async Task<ActionResult<List<AdviceRequestModel>>> GetAdviceRequestsByUserId(int userId)
         {
@@ -47,33 +53,27 @@ namespace StockAdvisorBackend.Controllers
             return Ok(requests);
         }
 
-        // --- פונקציה פנימית ששולחת שאלה לשרת Ollama ---
+        // ======== Helper: Send question to Ollama LLM ========= //
         private async Task<string> SendQuestionToOllama(string question)
         {
             using var httpClient = new HttpClient();
 
-            // גוף הבקשה שאותו שולחים ל-Ollama
             var requestBody = new
             {
-                model = "llama3", // השם של המודל שרץ אצלך ב-Ollama
+                model = "llama3", // Model name used by Ollama server
                 prompt = question
             };
 
-            // שליחת בקשה לשרת Ollama
             var response = await httpClient.PostAsJsonAsync("http://localhost:11434/api/generate", requestBody);
 
             if (!response.IsSuccessStatusCode)
-            {
-                // במקרה של שגיאה חוזרים עם הודעה כללית
                 return "Sorry, could not retrieve advice at the moment.";
-            }
 
-            // קבלת התגובה מ-Ollama
             var responseContent = await response.Content.ReadFromJsonAsync<OllamaResponse>();
             return responseContent?.response ?? "No advice available.";
         }
 
-        // --- מחלקת עזר לקרוא את התשובה של Ollama ---
+        // ======== Helper Class to parse Ollama's response ========= //
         private class OllamaResponse
         {
             public string response { get; set; }

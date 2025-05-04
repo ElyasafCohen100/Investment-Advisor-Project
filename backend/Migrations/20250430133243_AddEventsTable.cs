@@ -1,4 +1,10 @@
-﻿using System;
+﻿// ╔══════════════════════════════════════════════════════════════════════════════╗
+// ║             📊 Migration: Add Events Table + Portfolio/Transaction Tweaks    
+// ║  This migration adds an Events table for logging.                            
+// ║  Also updates foreign keys and renames quantity/price fields for clarity.    
+// ╚══════════════════════════════════════════════════════════════════════════════╝
+
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +17,7 @@ namespace StockAdvisorBackend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // ========== Drop old foreign keys ========== //
             migrationBuilder.DropForeignKey(
                 name: "FK_PortfolioItems_Users_UserId",
                 table: "PortfolioItems");
@@ -19,6 +26,7 @@ namespace StockAdvisorBackend.Migrations
                 name: "FK_Transactions_Users_UserId",
                 table: "Transactions");
 
+            // ========== Drop old indexes ========== //
             migrationBuilder.DropIndex(
                 name: "IX_Transactions_UserId",
                 table: "Transactions");
@@ -27,10 +35,12 @@ namespace StockAdvisorBackend.Migrations
                 name: "IX_PortfolioItems_UserId",
                 table: "PortfolioItems");
 
+            // ========== Drop old IsPurchase column ========== //
             migrationBuilder.DropColumn(
                 name: "IsPurchase",
                 table: "Transactions");
 
+            // ========== Rename fields for clarity ========== //
             migrationBuilder.RenameColumn(
                 name: "Quantity",
                 table: "Transactions",
@@ -46,6 +56,7 @@ namespace StockAdvisorBackend.Migrations
                 table: "PortfolioItems",
                 newName: "AveragePurchasePrice");
 
+            // ========== Add new nullable foreign key columns ========== //
             migrationBuilder.AddColumn<int>(
                 name: "UserModelId",
                 table: "Transactions",
@@ -58,6 +69,7 @@ namespace StockAdvisorBackend.Migrations
                 type: "int",
                 nullable: true);
 
+            // ========== Create Events table ========== //
             migrationBuilder.CreateTable(
                 name: "Events",
                 columns: table => new
@@ -75,6 +87,7 @@ namespace StockAdvisorBackend.Migrations
                     table.PrimaryKey("PK_Events", x => x.Id);
                 });
 
+            // ========== Create indexes for new foreign keys ========== //
             migrationBuilder.CreateIndex(
                 name: "IX_Transactions_UserModelId",
                 table: "Transactions",
@@ -85,6 +98,7 @@ namespace StockAdvisorBackend.Migrations
                 table: "PortfolioItems",
                 column: "UserModelId");
 
+            // ========== Add new foreign key constraints ========== //
             migrationBuilder.AddForeignKey(
                 name: "FK_PortfolioItems_Users_UserModelId",
                 table: "PortfolioItems",
@@ -103,6 +117,7 @@ namespace StockAdvisorBackend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            // ========== Reverse all changes ========== //
             migrationBuilder.DropForeignKey(
                 name: "FK_PortfolioItems_Users_UserModelId",
                 table: "PortfolioItems");

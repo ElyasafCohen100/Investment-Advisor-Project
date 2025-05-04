@@ -9,14 +9,17 @@
 # ║
 # ╚══════════════════════════════════╝
 
+import os
+
 from PySide6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QMessageBox,
     QVBoxLayout, QFormLayout
 )
-from PySide6.QtGui import QPixmap, QPalette, QBrush
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap, QPalette, QBrush
 
 from Frontend.Services.api_service import APIService
+
 
 # ======================================== BUY STOCKS WINDOW ======================================== #
 class BuyStocksWindow(QWidget):
@@ -25,10 +28,12 @@ class BuyStocksWindow(QWidget):
         self.setWindowTitle("🌊 Buy Stocks – Responsive Design 🌊")
         self.resize(800, 500)
 
-        # ===== Set Background Image ===== #
+        # ===== Set Background Image from Relative Path ===== #
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
+
         palette = QPalette()
-        background = QPixmap(
-            "C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg")  # ✅ make sure this exists
+        background = QPixmap(bg_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
@@ -101,6 +106,3 @@ class BuyStocksWindow(QWidget):
             QMessageBox.information(self, "Done ✅", response["message"])
         else:
             QMessageBox.critical(self, "Error ❌", response["message"])
-
-
-

@@ -1,4 +1,9 @@
-﻿using System;
+﻿// ╔══════════════════════════════════════════════════════════════════════╗
+// ║                        📦 Initial Migration                        
+// ║   Creates core database tables: Users, Stocks, Advice, Portfolio,    
+// ║   Transactions. Sets primary keys and relationships.                  
+// ╚══════════════════════════════════════════════════════════════════════╝
+
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +16,7 @@ namespace StockAdvisorBackend.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            // ========== Create Stocks Table ========== //
             migrationBuilder.CreateTable(
                 name: "Stocks",
                 columns: table => new
@@ -26,6 +32,7 @@ namespace StockAdvisorBackend.Migrations
                     table.PrimaryKey("PK_Stocks", x => x.Id);
                 });
 
+            // ========== Create Users Table ========== //
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -40,6 +47,7 @@ namespace StockAdvisorBackend.Migrations
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
+            // ========== Create AdviceRequests Table ========== //
             migrationBuilder.CreateTable(
                 name: "AdviceRequests",
                 columns: table => new
@@ -62,6 +70,7 @@ namespace StockAdvisorBackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // ========== Create PortfolioItems Table ========== //
             migrationBuilder.CreateTable(
                 name: "PortfolioItems",
                 columns: table => new
@@ -90,6 +99,7 @@ namespace StockAdvisorBackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // ========== Create Transactions Table ========== //
             migrationBuilder.CreateTable(
                 name: "Transactions",
                 columns: table => new
@@ -120,6 +130,7 @@ namespace StockAdvisorBackend.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            // ========== Create Indexes ========== //
             migrationBuilder.CreateIndex(
                 name: "IX_AdviceRequests_UserId",
                 table: "AdviceRequests",
@@ -149,20 +160,12 @@ namespace StockAdvisorBackend.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AdviceRequests");
-
-            migrationBuilder.DropTable(
-                name: "PortfolioItems");
-
-            migrationBuilder.DropTable(
-                name: "Transactions");
-
-            migrationBuilder.DropTable(
-                name: "Stocks");
-
-            migrationBuilder.DropTable(
-                name: "Users");
+            // ========== Drop All Tables ========== //
+            migrationBuilder.DropTable(name: "AdviceRequests");
+            migrationBuilder.DropTable(name: "PortfolioItems");
+            migrationBuilder.DropTable(name: "Transactions");
+            migrationBuilder.DropTable(name: "Stocks");
+            migrationBuilder.DropTable(name: "Users");
         }
     }
 }

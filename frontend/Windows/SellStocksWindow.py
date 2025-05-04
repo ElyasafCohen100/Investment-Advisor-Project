@@ -9,12 +9,13 @@
 # ║
 # ╚══════════════════════════════════╝
 
+import os
 from PySide6.QtWidgets import (
     QWidget, QLineEdit, QPushButton, QMessageBox,
     QVBoxLayout, QFormLayout, QFrame
 )
-from PySide6.QtGui import QPixmap, QPalette, QBrush
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QPixmap, QPalette, QBrush
 from Frontend.Services.api_service import APIService
 
 
@@ -26,10 +27,12 @@ class SellStocksWindow(QWidget):
         self.setWindowTitle("📉 Sell Stocks – Finance Mode")
         self.resize(800, 500)  # Same as Buy Window 📐
 
-        # ===== Set Background Image ===== #
+        # ===== Set Background Image from Relative Path ===== #
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
+
         palette = QPalette()
-        background = QPixmap(
-            "C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg")  # ✅ make sure this exists
+        background = QPixmap(self.bg_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
@@ -93,7 +96,7 @@ class SellStocksWindow(QWidget):
     # ======= Responsive background adjustment on resize ======= #
     def on_resize(self, event):
         palette = QPalette()
-        background = QPixmap("C:/Users/elyas/Pictures/bg_finance.png")
+        background = QPixmap(self.bg_path)
         palette.setBrush(QPalette.Window, QBrush(background.scaled(
             event.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)))
         self.setPalette(palette)

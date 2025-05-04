@@ -8,29 +8,28 @@
 # ║  🧑‍💻 Israel Shlomo 315130344 🧑‍💻
 # ╚══════════════════════════════════╝
 
+import os
 # ============= Import all required modules and dependencies ============= #
 from PySide6.QtWidgets import (
-    QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout, QWidget, QLabel, QMessageBox,
-    QLineEdit, QTextEdit
+    QMainWindow, QPushButton, QVBoxLayout, QHBoxLayout,
+    QWidget, QLabel, QMessageBox, QLineEdit, QTextEdit
 )
-from PySide6.QtGui import QPixmap, QPalette, QBrush, QImage, QCursor
-from PySide6.QtCore import Qt, QSize, QRect, QTimer
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from datetime import datetime
-import matplotlib.dates as mdates
 from urllib.request import urlopen
+from matplotlib.figure import Figure
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtGui import QPixmap, QPalette, QBrush, QImage
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 
 # ============= Import custom project files ============= #
 from Frontend.Constants.stock_logos import stock_logos
+from Frontend.Services.Ollama_api import ask_google_gemini
 from Frontend.Services.polygon_service import PolygonService
-from Frontend.Services.Ollama_api import ask_ollama
 from Frontend.Windows.BuyStocksWindow import BuyStocksWindow
-from Frontend.Windows.SellStocksWindow import SellStocksWindow
-from Frontend.Windows.OrderHistoryWindow import OrderHistoryWindow
 from Frontend.Windows.PortfolioWindow import PortfolioWindow
 from Frontend.Windows.AIChatBotWindow import AIChatBotWindow
-from Frontend.Services.Ollama_api import ask_google_gemini
+from Frontend.Windows.SellStocksWindow import SellStocksWindow
+from Frontend.Windows.OrderHistoryWindow import OrderHistoryWindow
 
 
 # ╔════════════════════════════════════════════════════════════════╗
@@ -48,7 +47,8 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(1000, 700)
 
         # ============= Set background image ============= #
-        self.bg_path = "C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg"
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
         self.bg_label = QLabel(self)
         self.bg_label.setScaledContents(True)
         self.bg_label.lower()

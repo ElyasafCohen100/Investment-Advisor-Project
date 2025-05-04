@@ -10,11 +10,11 @@
 # ╚══════════════════════════════════╝
 
 # =========== Load libraries ============ #
-import requests
 import os
+import requests
+import google.generativeai as genai
 from sentence_transformers import SentenceTransformer
 from Frontend.Services.vector_store import load_data, create_faiss_index, search_similar_chunks
-import google.generativeai as genai
 
 # =========== Base function: send prompt to Ollama ============ #
 def ask_ollama(prompt: str, model="gemma:2b") -> str:

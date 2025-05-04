@@ -1,24 +1,37 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// ╔════════════════════════════════════════════════════════════════════╗
+// ║                     💼 PortfolioController.cs
+// ║
+// ║  💡 Purpose:                                                           
+// ║     Manages stock portfolios per user — supports adding stocks        
+// ║     and retrieving current portfolio items.                           
+// ║                                                                        
+// ║  🧰 Tech:                                                              
+// ║     - ASP.NET Core                                                    
+// ║     - IPortfolioService (DI)                                          
+// ╚════════════════════════════════════════════════════════════════════╝
+
+using Microsoft.AspNetCore.Mvc;
 using StockAdvisorBackend.DTOs;
 using StockAdvisorBackend.Models;
 using StockAdvisorBackend.Services.Interfaces;
-using System.Threading.Tasks;
-
 
 namespace StockAdvisorBackend.Controllers
 {
+    // ======= Route: api/Portfolio ======= //
     [Route("api/[controller]")]
     [ApiController]
     public class PortfolioController : ControllerBase
     {
+        // ======= Injected service to manage portfolio logic ======= //
         private readonly IPortfolioService _portfolioService;
 
+        // ======= Constructor for dependency injection ======= //
         public PortfolioController(IPortfolioService portfolioService)
         {
             _portfolioService = portfolioService;
         }
 
-        // 🎯 הוספת מניה לתיק האישי
+        // ======= POST: Add a stock to the user's portfolio ======= //
         [HttpPost]
         public async Task<IActionResult> AddPortfolioItem([FromBody] PortfolioDto request)
         {
@@ -35,11 +48,10 @@ namespace StockAdvisorBackend.Controllers
             return Ok("Stock added to portfolio successfully.");
         }
 
-        // 🎯 שליפת כל המניות בתיק של משתמש
+        // ======= GET: Get all portfolio items for a specific user ======= //
         [HttpGet("user/{userId}")]
         public async Task<IActionResult> GetPortfolioByUserId(int userId)
         {
-
             var portfolioItems = await _portfolioService.GetPortfolioByUserIdAsync(userId);
 
             if (portfolioItems == null || portfolioItems.Count == 0)

@@ -9,14 +9,16 @@
 # ║
 # ╚══════════════════════════════════╝
 
+import os
+
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QTableWidget, QTableWidgetItem,
     QPushButton, QLineEdit, QHBoxLayout, QDateEdit, QFileDialog, QMessageBox
 )
-from PySide6.QtGui import QPalette, QBrush, QPixmap, QCursor
-from PySide6.QtCore import Qt, QDate
-from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from PySide6.QtCore import Qt, QDate
+from PySide6.QtGui import QPalette, QBrush, QPixmap, QCursor
+from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 
 from Frontend.Services.api_service import APIService
 
@@ -28,10 +30,12 @@ class OrderHistoryWindow(QWidget):
         self.setWindowTitle("📄 Order History – Investment Recap")
         self.resize(1000, 700)
 
-        # ===== Set Background Image ===== #
+        # ===== Set Background Image from Relative Path ===== #
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
+
         palette = QPalette()
-        background = QPixmap(
-            "C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg")  # ✅ make sure this exists
+        background = QPixmap(bg_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
@@ -100,8 +104,6 @@ class OrderHistoryWindow(QWidget):
                 min-width: 100px;
             }
         """)
-
-
 
         # ===== Title ===== #
         self.title = QLabel("📄 Order History")
@@ -190,7 +192,6 @@ class OrderHistoryWindow(QWidget):
         ]
 
         self.load_data(self.full_data)
-
 
     # ===== Load data into the table ===== #
     def load_data(self, data):

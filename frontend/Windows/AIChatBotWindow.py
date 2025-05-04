@@ -9,6 +9,7 @@
 # ║
 # ╚══════════════════════════════════╝
 
+import os
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QLineEdit, QPushButton,
     QHBoxLayout, QScrollArea, QSizePolicy, QFrame
@@ -17,6 +18,7 @@ from PySide6.QtGui import QPalette, QBrush, QPixmap
 from PySide6.QtCore import Qt, QTimer
 from Frontend.Services.Ollama_api import ask_ollama_contextual
 
+
 # ======================================== AI CHATBOT WINDOW ======================================== #
 class AIChatBotWindow(QWidget):
     def __init__(self):
@@ -24,13 +26,16 @@ class AIChatBotWindow(QWidget):
         self.setWindowTitle("🤖 AI Chat Assistant")
         self.resize(850, 650)
 
-        # ========== 🌍 Background Image ========== #
+        # ========== 🌍 Set background image using relative path ========== #
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        self.bg_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
+
         palette = QPalette()
-        background = QPixmap("C:/Users/elyas/PycharmProjects/InvestmentAdvisor/Pictures/background_pic.jpeg")
+        background = QPixmap(self.bg_path)
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
-        # ========== 🌈 Styling ========== #
+        # ========== 🌈 Global Styling ========== #
         self.setStyleSheet("""
             QWidget {
                 background-repeat: no-repeat;
@@ -98,6 +103,17 @@ class AIChatBotWindow(QWidget):
 
         self.setLayout(main_layout)
 
+    # ========== 🖼️ Responsive background resize ========== #
+    def resizeEvent(self, event):
+        pixmap = QPixmap(self.bg_path)
+        scaled = pixmap.scaled(self.size(), Qt.KeepAspectRatioByExpanding, Qt.SmoothTransformation)
+
+        palette = QPalette()
+        palette.setBrush(QPalette.Window, QBrush(scaled))
+        self.setPalette(palette)
+
+        super().resizeEvent(event)
+
     # ========== 🗨️ Chat Bubble Builder ========== #
     def create_bubble(self, text, is_user=True):
         bubble = QLabel(text)
@@ -135,7 +151,7 @@ class AIChatBotWindow(QWidget):
         wrapper.setFrameStyle(QFrame.NoFrame)
         return wrapper
 
-    # ========== Send Action ========== #
+    # ========== 🎯 Send Action Handler ========== #
     def handle_send(self):
         prompt = self.input_field.text().strip()
         if not prompt:
@@ -154,7 +170,7 @@ class AIChatBotWindow(QWidget):
         self.input_field.clear()
         self.get_bot_reply(prompt)
 
-    # ========== Get response using contextual bot ========== #
+    # ========== 📡 Get Response from LLM (contextual) ========== #
     def get_bot_reply(self, prompt):
         try:
             response = ask_ollama_contextual(prompt)

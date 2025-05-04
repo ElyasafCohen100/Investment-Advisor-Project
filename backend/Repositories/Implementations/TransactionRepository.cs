@@ -1,11 +1,22 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿// ╔════════════════════════════════════════════════════════════════════╗
+// ║                   💰 TransactionRepository.cs
+// ║
+// ║  💡 Implements: ITransactionRepository                                             
+// ║                                                                                    
+// ║  ✅ Purpose:                                                                      
+// ║     creation, update, deletion, and retrieval by user or ID.                      
+// ║     Logs events with EventService to track state changes.                         
+// ║                                                                                   
+// ║  🧰 Tech:                                                                          
+// ║     - Entity Framework Core (async DB calls)                                      
+// ║     - EventService (for logging CRUD operations)                                
+// ╚════════════════════════════════════════════════════════════════════╝
+
 using StockAdvisorBackend.Data;
 using StockAdvisorBackend.Models;
-using StockAdvisorBackend.Repositories.Interfaces;
 using StockAdvisorBackend.Services;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using StockAdvisorBackend.Repositories.Interfaces;
 
 namespace StockAdvisorBackend.Repositories.Implementations
 {
@@ -14,85 +25,84 @@ namespace StockAdvisorBackend.Repositories.Implementations
         private readonly ApplicationDbContext _context;
         private readonly EventService _eventService;
 
-
-        public TransactionRepository(ApplicationDbContext context ,EventService eventService)
+        // ======= Constructor with DI ======= //
+        public TransactionRepository(ApplicationDbContext context, EventService eventService)
         {
             _context = context;
             _eventService = eventService;
         }
 
-        // קבלת כל העסקאות של המשתמש
+        // ======= Get all transactions by user ID (including stock info) ======= //
         public async Task<List<TransactionModel>> GetTransactionsByUserIdAsync(int userId)
         {
             return await _context.Transactions
-                                 .Include(t => t.Stock) // אם ברצונך להוסיף מידע על המניה
+                                 .Include(t => t.Stock)
                                  .Where(t => t.UserId == userId)
                                  .ToListAsync();
         }
 
-        // הוספת עסקה חדשה
+        // ======= Add a new transaction and log event ======= //
         public async Task AddTransactionAsync(TransactionModel transaction)
         {
             _context.Transactions.Add(transaction);
             await _context.SaveChangesAsync();
 
-
-            // טען את העסקה מחדש עם Include ל-Stock לפני שאתה שולח לאירוע
+            // Reload transaction with stock data for logging
             var fullTransaction = await _context.Transactions
-                .Include(t => t.Stock)
-                .FirstOrDefaultAsync(t => t.Id == transaction.Id);
+                                                .Include(t => t.Stock)
+                                                .FirstOrDefaultAsync(t => t.Id == transaction.Id);
 
-            // רישום האירוע
             await _eventService.LogEventAsync(
-            "TransactionCreated",         // עדכון השם שיהיה יותר ברור
-               "Transaction",
-               transaction.Id,
-              fullTransaction);
+                "TransactionCreated",
+                "Transaction",
+                transaction.Id,
+                fullTransaction
+            );
         }
 
-        // קבלת עסקה לפי ID
+        // ======= Get a single transaction by its ID ======= //
         public async Task<TransactionModel> GetTransactionByIdAsync(int id)
         {
             return await _context.Transactions
-                                 .Include(t => t.Stock) // כולל את המניה כדי שנוכל להחזיר אותה
+                                 .Include(t => t.Stock)
                                  .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        // עדכון עסקה
+        // ======= Update an existing transaction and log event ======= //
         public async Task UpdateTransactionAsync(TransactionModel transaction)
         {
             _context.Transactions.Update(transaction);
             await _context.SaveChangesAsync();
 
-
-            // רישום האירוע
             await _eventService.LogEventAsync(
                 "TransactionUpdated",
-                 "Transaction",
-                     transaction.Id,
-                      transaction
-    );
+                "Transaction",
+                transaction.Id,
+                transaction
+            );
         }
 
-        // מחיקת עסקה
+        // ======= Delete a transaction by ID and log event ======= //
         public async Task DeleteTransactionAsync(int id)
         {
             var transaction = await _context.Transactions.FindAsync(id);
             if (transaction != null)
             {
                 _context.Transactions.Remove(transaction);
-                // רישום האירוע
+
                 await _eventService.LogEventAsync(
-                      "TransactionDeleted",
-                      "Transaction",
-                       transaction.Id,
-                       transaction
-        );
-            }
+                    "TransactionDeleted",
+                    "Transaction",
+                    transaction.Id,
+                    transaction
+                );
+
                 await _context.SaveChangesAsync();
+            }
         }
 
-        public async Task<List<TransactionModel>> GetAllTransactionsAsync()  // הוספנו את הפונקציה הזאת
+        // ======= Get all transactions in the system ======= //
+        public async Task<List<TransactionModel>> GetAllTransactionsAsync()
         {
             return await _context.Transactions
                                  .Include(t => t.Stock)

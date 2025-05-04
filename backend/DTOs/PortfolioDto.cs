@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// ╔═════════════════════════════════════════════════════╗
+// ║                📦 Portfolio DTO    
+// ║  Contains user portfolio data (stock & quantity)  
+// ╚═════════════════════════════════════════════════════╝
+
+using System.ComponentModel.DataAnnotations;
 
 namespace StockAdvisorBackend.DTOs
 {

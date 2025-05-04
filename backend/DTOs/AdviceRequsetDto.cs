@@ -1,4 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿// ╔═══════════════════════════════════════════════════╗
+// ║             📦 Advice Request DTO    
+// ║  Contains username & password for registration  
+// ╚═══════════════════════════════════════════════════╝
+
+using System.ComponentModel.DataAnnotations;
 
 namespace StockAdvisorBackend.DTOs
 {
