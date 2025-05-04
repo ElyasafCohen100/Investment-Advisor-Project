@@ -1,6 +1,6 @@
 ﻿// ╔═════════════════════════════════════════════════════╗
-// ║             📦 Login Request DTO    
-// ║  Contains login credentials: username & password  
+// ║             📦 Login Request DTO                    
+// ║  Contains login credentials: username & password    
 // ╚═════════════════════════════════════════════════════╝
 
 using System.ComponentModel.DataAnnotations;

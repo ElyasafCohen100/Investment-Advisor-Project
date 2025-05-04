@@ -9,9 +9,7 @@
 # ║
 # ╚══════════════════════════════════╝
 
-
 from Frontend.Windows.MainWindow import MainWindow
-
 from PySide6.QtWidgets import (
     QWidget, QLabel, QVBoxLayout, QLineEdit, QPushButton, QMessageBox, QHBoxLayout
 )
@@ -20,6 +18,17 @@ from PySide6.QtCore import Qt
 from Frontend.Services.api_service import APIService
 import os
 
+# ╔══════════════════════════════════════════════════════════════╗
+# ║ 📝 SignUpWindow – UI for Creating a New User Account
+# ║ This window allows a new user to sign up by providing
+# ║ a username and password. If the registration is successful,
+# ║ the user is redirected to the MainWindow.
+# ╚══════════════════════════════════════════════════════════════╝
+
+
+# ====== SignUpWindow Class ====== #
+# A window that allows a user to create an account.
+# If signup is successful, it opens MainWindow.
 
 class SignUpWindow(QWidget):
     def __init__(self, login_window=None):
@@ -28,7 +37,7 @@ class SignUpWindow(QWidget):
         self.login_window = login_window
         self.resize(800, 500)
 
-        # === רקע ===
+        # ====== Set background image ====== #
         palette = QPalette()
         current_dir = os.path.dirname(__file__)
         background_path = os.path.normpath(os.path.join(current_dir, "..", "..", "Pictures", "background_pic.jpeg"))
@@ -36,7 +45,7 @@ class SignUpWindow(QWidget):
         palette.setBrush(QPalette.Window, QBrush(background))
         self.setPalette(palette)
 
-        # === עיצוב כולל ===
+        # ====== Global style (labels, inputs, buttons) ====== #
         self.setStyleSheet("""
             QLabel#titleLabel {
                 color: white;
@@ -72,12 +81,12 @@ class SignUpWindow(QWidget):
             }
         """)
 
-        # === כותרת "Sign Up" ===
+        # ====== Title Label ====== #
         self.title_label = QLabel("📝 Sign Up")
         self.title_label.setObjectName("titleLabel")
         self.title_label.setAlignment(Qt.AlignCenter)
 
-        # === שדות קלט ===
+        # ====== Input Fields ====== #
         self.username_input = QLineEdit()
         self.username_input.setPlaceholderText("Username")
 
@@ -85,18 +94,18 @@ class SignUpWindow(QWidget):
         self.password_input.setPlaceholderText("Password")
         self.password_input.setEchoMode(QLineEdit.Password)
 
-        # === כפתור רישום ===
+        # ====== Signup Button ====== #
         self.signup_button = QPushButton("✅ Create Account")
         self.signup_button.setCursor(QCursor(Qt.PointingHandCursor))
         self.signup_button.clicked.connect(self.handle_signup)
 
-        # === עטיפת הכפתור כדי ליישר אותו למרכז ===
+        # ====== Center the button ====== #
         button_wrapper = QHBoxLayout()
         button_wrapper.addStretch()
         button_wrapper.addWidget(self.signup_button)
         button_wrapper.addStretch()
 
-        # === פריסה ===
+        # ====== Main Layout ====== #
         layout = QVBoxLayout()
         layout.setAlignment(Qt.AlignCenter)
         layout.setSpacing(18)
@@ -106,6 +115,10 @@ class SignUpWindow(QWidget):
         layout.addLayout(button_wrapper)
 
         self.setLayout(layout)
+
+    # ====== handle_signup() ====== #
+    # This function handles the signup logic.
+    # If successful, it opens MainWindow. Else, it shows an error.
 
     def handle_signup(self):
         username = self.username_input.text().strip()
@@ -122,7 +135,7 @@ class SignUpWindow(QWidget):
             APIService.current_user_id = response["userId"]
             QMessageBox.information(self, "Success", response["message"])
 
-            # פתח את החלון הראשי עם ה־userId
+            # ====== Open MainWindow after successful signup ====== #
             self.MainWindow1 = MainWindow(user_id=response["userId"])
             self.MainWindow1.show()
             self.close()
