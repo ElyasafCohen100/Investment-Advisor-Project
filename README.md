@@ -1,72 +1,72 @@
 # Investment Advisor Project 💼📈🧠
 
-This is a **Stock Portfolio Management System** developed as part of the "Real-Time Systems & Window Engineering" course.
-It combines a **Python GUI (PySide6)** frontend with a powerful **ASP.NET Core** backend – and smart integrations with cloud & AI services 🤖☁️
+This is a **Stock Portfolio Management System** developed as part of the "Windows Systems Engineering" course 💻🏗️  
+It combines a modern **Python GUI (PySide6)** frontend with a powerful **ASP.NET Core** backend – and smart integrations with cloud & AI services 🤖☁️
 
 ---
 
-## 🎮 How to Use 🎮
+## 🎮 How to Use: 🎮
 
 - 🔐 Log in securely as a user  
 - 📈 Buy or Sell stocks through the GUI  
 - 📊 View portfolio in graph or table mode  
-- 🧠 Ask the built-in AI advisor for financial recommendations  
+- 🧠 Ask the built-in AI advisor (powered by Ollama LLM) for financial recommendations  
 - 🖼️ Upload supporting files (e.g., charts) via Cloudinary  
-- 🌍 Get real-time market data from Polygon.io
+- 🌍 Get real-time market data from Polygon.io  
 
 ---
 
-## Project Files 📁
+## 📁 Project Structure: 📁
 
-### Backend (`backend/`) 🔙
+### 🔙 Backend (`backend/`) 🔙
 - `Controllers/` – API endpoints  
 - `Services/` – business logic  
 - `Repositories/` – data access  
-- `DTOs/`, `Requests/`, `Models/` – data structures  
-- `appsettings.json` – configuration  
-- `StockAdvisorBackend.sln` – solution file  
+- `DTOs/`, `Requests/`, `Models/` – structured data  
+- `appsettings.json` – environment configs  
+- `StockAdvisorBackend.sln` – Visual Studio solution file  
 
-### Frontend (`frontend/`) 🖥️
+### 🖥️ Frontend (`frontend/`) 🖥️
 - `Windows/` – all GUI windows  
-- `Services/` – API integrations  
-- `Constants/` – static values  
-- `Pictures/` – UI icons and images  
-- `mainWindow.py` – launcher for the app  
+- `Services/` – API and helper logic  
+- `Constants/` – static values and config  
+- `Pictures/` – UI icons, logos, and visuals  
+- `mainWindow.py` – main application entry point  
 
 ---
 
-## Technologies Used 🧠
+## 🧠 Technologies Used: 🧠
 
 ### Frontend
 - Python 3.9+  
 - PySide6 / Qt  
-- QtCharts (for graphs)  
+- QtCharts  
 
 ### Backend
 - ASP.NET Core 6.0 / 8.0  
 - MVC + CQRS + Event Sourcing  
 - Hosted on `somee.com`  
 
-### External Services ☁️
-- [Polygon.io](https://polygon.io) – market data API  
-- [Cloudinary](https://cloudinary.com) – image uploads  
-- [Ollama](https://ollama.ai) – LLM agent via Docker  
+### ☁️ External Integrations
+- 🌐 [Polygon.io](https://polygon.io) – real-time stock market data  
+- 🖼️ [Cloudinary](https://cloudinary.com) – image & file upload  
+- 🧠 [Ollama](https://ollama.ai) – LLM agent running via Docker, supports RAG-style queries  
 
 ---
 
-## How to Run 🛠️
+## 🛠️ How to Run: 🛠️
 
-### Backend
+### Backend (API)
 
 ```bash
-# Open with Visual Studio
+# Open in Visual Studio
 StockAdvisorBackend.sln
 
-# Make sure appsettings.json is configured
-# Press F5 to run the API locally
+# Configure `appsettings.json`
+# Then run with F5 or use IIS Express
 ```
 
-### Frontend
+### Frontend (GUI App)
 
 ```bash
 cd frontend
@@ -76,10 +76,14 @@ python Windows/mainWindow.py
 
 ---
 
-## Made by Elyasaf Cohen ✨
+## 🧑‍💻 Created By: 🧑‍💻
+
+- Elyasaf Cohen  
+- Eldad Cohen  
+- Israel Shlomo
 
 GitHub: [@ElyasafCohen100](https://github.com/ElyasafCohen100)
 
 ---
 
-> ⚡ If you like this project, please give it a ⭐ on GitHub! ✌️😎
+> ✨ If you like this project, don’t forget to give it a star on GitHub! ✨   
