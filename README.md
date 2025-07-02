@@ -1,11 +1,11 @@
 # Investment Advisor Project 💼📈🧠
 
-This is a **Stock Portfolio Management System** developed as part of the "Real-Time Systems & Window Engineering" course
+This is a **Stock Portfolio Management System** developed as part of the "Real-Time Systems & Window Engineering" course.
 It combines a **Python GUI (PySide6)** frontend with a powerful **ASP.NET Core** backend – and smart integrations with cloud & AI services 🤖☁️
 
 ---
 
-## How to Use 🎮
+## 🎮 How to Use 🎮
 
 - 🔐 Log in securely as a user  
 - 📈 Buy or Sell stocks through the GUI  
