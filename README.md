@@ -2,7 +2,7 @@
   <img src="9.png"/>
 </p>
 
-# Investment Advisor Project 💼📈🧠 
+# Investment Advisor Project 💼📈🧠  
 
 ![GitHub stars](https://img.shields.io/github/stars/ElyasafCohen100/Investment-Advisor-Project?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/ElyasafCohen100/Investment-Advisor-Project?style=social)
@@ -115,6 +115,7 @@ python Windows/mainWindow.py
 ---
 
 > ✨ If you like this project – please leave a star! ✨
+
 
 
 
